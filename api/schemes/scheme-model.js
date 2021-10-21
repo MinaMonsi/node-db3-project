@@ -1,3 +1,5 @@
+const db = require("../../data/db-config")
+
 function find() { // EXERCISE A
   /*
     1A- Study the SQL query below running it in SQLite Studio against `data/schemes.db3`.
@@ -15,6 +17,12 @@ function find() { // EXERCISE A
     2A- When you have a grasp on the query go ahead and build it in Knex.
     Return from this function the resulting dataset.
   */
+ return db('schemes as sc')
+//LEFT JOIN steps as st ON sc.scheme_id = st.scheme_id
+ .leftJoin('steps as st', 'sc.scheme_id', 'st.scheme_id')
+ .select('sc.*')
+ .count('st.step_id as number_of_steps')
+ .groupBy('sc.scheme_id')
 }
 
 function findById(scheme_id) { // EXERCISE B
@@ -83,6 +91,11 @@ function findById(scheme_id) { // EXERCISE B
         "steps": []
       }
   */
+ return db('schemes as sc')
+ .leftJoin('steps as st', 'sc.scheme_id', 'st.scheme_id')
+ .where('scheme_id', scheme_id)
+ .select('st.*','sc.scheme_name')
+ .orderBy('st.step_number','asc')
 }
 
 function findSteps(scheme_id) { // EXERCISE C
@@ -106,12 +119,14 @@ function findSteps(scheme_id) { // EXERCISE C
         }
       ]
   */
+ 
 }
 
 function add(scheme) { // EXERCISE D
   /*
     1D- This function creates a new scheme and resolves to _the newly created scheme_.
   */
+ return db('schema')
 }
 
 function addStep(scheme_id, step) { // EXERCISE E
